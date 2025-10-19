@@ -1,28 +1,81 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Navbar from '../component/Navbar'
 import RestaurantCard from '../component/RestaurantCard'
+import axios from 'axios'
+import Skeleton from '../component/Skeleton'
+import useFilterStore from '../store/filterStore'
 
 const Home = () => {
+
+    const [dataRestaurant, setDataRestaurant] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const { filters } = useFilterStore();
+    const fetchDataRestauran = async () => {
+        setIsLoading(true);
+        try {
+            const res = await axios.get('http://localhost:5000/restaurants');
+            setDataRestaurant(res.data);
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchDataRestauran();
+    }, []);
+
+    const filteredDataRestaurant = useMemo(() => {
+        let result = [...dataRestaurant];
+
+        if (filters.is_Open) {
+            result = result.filter((r) => r.is_open === true)
+        };
+
+        if (filters.price_range !== 'default') {
+            result = result.filter((r) => r.price_range === filters.price_range)
+        }
+
+        if (filters.categories !== 'default') {
+            result = result.filter((r) => r.categories[0] === filters.categories)
+        }
+        return result;
+    }, [dataRestaurant, filters])
+    console.log(filters.is_open);
+
+    if (isLoading) return (
+        <div className='px-10 py-8 grid grid-cols-4 gap-10'>
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+        </div>
+    )
+
     return (
         <div>
-            <div className='px-10 py-8'>
-                <h1 className='text-3xl mb-4'>Restaurants</h1>
-                <p className='w-1/2 text-gray-600'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque delectus, reiciendis nam ipsum vel inventore eveniet quasi dolorum facere aliquid, </p>
-            </div>
-            <Navbar />
             <h1 className='px-10 text-2xl mt-5 text-gray-500'>All Restaurants</h1>
             <div className='px-10 grid grid-cols-4 justify-end gap-10 py-10'>
-                <RestaurantCard />
-                <RestaurantCard />
-                <RestaurantCard />
-                <RestaurantCard />
-                <RestaurantCard />
-                <RestaurantCard />
-                <RestaurantCard />
+                {
+                    dataRestaurant.length === 0 ? (
+                        <div>
+                            Data Kosong
+                        </div>
+                    ) :
+                        filteredDataRestaurant.map((item) => (
+                            <RestaurantCard id={item.id} restaurant={item} />
+                        ))
+                }
             </div>
             <button className='shadow-2xl cursor-pointer w-64 border border-blue-900 py-1 text-blue-900 mx-auto block mb-10 hover:bg-blue-900 hover:border-white hover:text-white'>Load More</button>
         </div>
     )
 }
+
 
 export default Home
