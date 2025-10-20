@@ -29,7 +29,7 @@ const Home = () => {
     const filteredDataRestaurant = useMemo(() => {
         let result = [...dataRestaurant];
 
-        if (filters.is_Open) {
+        if (filters.is_open) {
             result = result.filter((r) => r.is_open === true)
         };
 
@@ -68,7 +68,7 @@ const Home = () => {
                         </div>
                     ) :
                         filteredDataRestaurant.map((item) => (
-                            <RestaurantCard id={item.id} restaurant={item} />
+                            <RestaurantCard key={item.id} restaurant={item} />
                         ))
                 }
             </div>

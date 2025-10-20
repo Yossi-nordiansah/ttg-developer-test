@@ -8,7 +8,7 @@ const Navbar = () => {
     const { filters, setFilters, clearFilters } = useFilterStore();
 
     const toggleOpen = () => {
-        setFilters({is_Open: !filters.is_open});
+        setFilters({is_open: !filters.is_open});
         setActive(!active)
     };
 
