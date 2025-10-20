@@ -42,7 +42,6 @@ const Home = () => {
         }
         return result;
     }, [dataRestaurant, filters])
-    console.log(filters.is_open);
 
     if (isLoading) return (
         <div className='px-10 py-8 grid grid-cols-4 gap-10'>
@@ -66,10 +65,15 @@ const Home = () => {
                         <div>
                             Data Kosong
                         </div>
-                    ) :
-                        filteredDataRestaurant.map((item) => (
-                            <RestaurantCard key={item.id} restaurant={item} />
-                        ))
+                    ) : filteredDataRestaurant.length === 0 ? (
+
+                        <div className='col-span-4 text-center min-h-[30vh] text-gray-500'>
+                            Data tidak ditemukan
+                        </div>
+
+                    ) : filteredDataRestaurant.map((item) => (
+                        <RestaurantCard key={item.id} restaurant={item} />
+                    ))
                 }
             </div>
             <button className='shadow-2xl cursor-pointer w-64 border border-blue-900 py-1 text-blue-900 mx-auto block mb-10 hover:bg-blue-900 hover:border-white hover:text-white'>Load More</button>

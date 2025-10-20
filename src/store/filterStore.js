@@ -12,13 +12,15 @@ const useFilterStore = create((set) => ({
       filters: { ...state.filters, ...newFilter },
     })),
 
-  clearFilters: set({
-    filters: {
-      is_open: false,
-      price_range: "default",
-      categories: "default",
-    },
-  }),
+  clearFilters: () => {
+    set({
+      filters: {
+        is_open: false,
+        price_range: "default",
+        categories: "default",
+      },
+    });
+  },
 }));
 
 export default useFilterStore;

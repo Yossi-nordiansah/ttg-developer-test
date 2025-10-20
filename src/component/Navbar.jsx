@@ -20,6 +20,11 @@ const Navbar = () => {
         setFilters({categories: e.target.value})
     }
 
+    const handleClearFilters = () => {
+        clearFilters
+        console.log("clear");
+    }
+
     return (
         <div className='border-y border-gray-400 py-3 px-10 flex justify-between'>
             <div className='flex gap-4'>
