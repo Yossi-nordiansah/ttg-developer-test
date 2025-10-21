@@ -4,11 +4,14 @@ import RestaurantCard from '../component/RestaurantCard'
 import axios from 'axios'
 import Skeleton from '../component/Skeleton'
 import useFilterStore from '../store/filterStore'
+import ModalDetailRestaurant from '../component/ModalDetailRestaurant'
 
 const Home = () => {
 
     const [dataRestaurant, setDataRestaurant] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
+    const [idRestaurant, setIdRestaurant] = useState(null);
     const { filters } = useFilterStore();
     const fetchDataRestauran = async () => {
         setIsLoading(true);
@@ -42,6 +45,13 @@ const Home = () => {
         }
         return result;
     }, [dataRestaurant, filters])
+
+    const handleOpenModalDetailRestaurant = (id) => {
+
+        setIdRestaurant(id);
+        setIsOpen(true);
+
+    }
 
     if (isLoading) return (
         <div className='px-10 py-8 grid grid-cols-4 gap-10'>
@@ -77,6 +87,7 @@ const Home = () => {
                 }
             </div>
             <button className='shadow-2xl cursor-pointer w-64 border border-blue-900 py-1 text-blue-900 mx-auto block mb-10 hover:bg-blue-900 hover:border-white hover:text-white'>Load More</button>
+            <ModalDetailRestaurant isOpen={isOpen} close={()=> setIsOpen(false)} id={idRestaurant}/>
         </div>
     )
 }
